@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#030806">
+<title>GHOST SIGNAL | Paranormal Investigation System</title>
+<style>
+:root{--bg:#030806;--panel:#07120d;--line:#24553a;--mint:#a5f5c2;--green:#57d98a;--dim:#648b70;--red:#ff5555;--amber:#d8b46c}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -15%,#143522 0,#07100b 42%,#020504 100%);color:var(--mint);font:13px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace;min-height:100vh}
+button,input{font:inherit}button{border:1px solid #326d49;background:#0b2115;color:#c8f8d5;border-radius:5px;padding:10px 12px;cursor:pointer}button:hover{background:#153b25}button:disabled{opacity:.4;cursor:not-allowed}
+.wrap{max-width:1150px;margin:auto;padding:17px 13px 35px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #1e4930;padding-bottom:13px;margin-bottom:12px}.logo{font-size:clamp(23px,5vw,35px);font-weight:900;letter-spacing:3px;text-shadow:0 0 15px #58e78d}.sub{font-size:9px;letter-spacing:2px;color:var(--dim)}.status{font-size:11px;color:var(--red);text-align:right}.panel{background:linear-gradient(145deg,#091710,#050c08);border:1px solid var(--line);border-radius:7px;padding:11px;box-shadow:0 8px 22px #0006}.bar{display:flex;justify-content:space-between;align-items:center;gap:8px}.muted{color:var(--dim);font-size:10px}.layout{display:grid;gap:11px}.camera{position:relative;background:#010302;aspect-ratio:16/10;border:1px solid #39734e;border-radius:5px;overflow:hidden;margin-top:9px}.camera video,.camera img{width:100%;height:100%;object-fit:cover;display:none;filter:grayscale(1) sepia(1) hue-rotate(75deg) saturate(1.8) contrast(1.3)}.camera canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.gridlines{position:absolute;inset:0;background:linear-gradient(#51d98713 1px,transparent 1px),linear-gradient(90deg,#51d98713 1px,transparent 1px);background-size:34px 34px;pointer-events:none}.scanlines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 3px,#b6ffd00c 4px,transparent 5px);pointer-events:none}.hud{position:absolute;inset:8px;display:flex;justify-content:space-between;align-items:flex-start;font-size:10px;text-shadow:0 1px 5px #000;pointer-events:none}.placeholder{position:absolute;inset:0;display:grid;place-content:center;text-align:center;gap:8px;color:#639675}.placeholder b{font-size:39px}.controls{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:9px}.meter{height:7px;background:#14291c;border-radius:8px;overflow:hidden;margin:6px 0}.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#2c9958,#a2ffc0);transition:width .35s}.num{font-size:25px;letter-spacing:2px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}.radar{width:140px;height:140px;max-width:100%;border:1px solid #3d8055;border-radius:50%;margin:10px auto;background:repeating-radial-gradient(circle,transparent 0 20px,#24563a 21px 22px,transparent 23px 34px);position:relative;overflow:hidden}.radar:before{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(transparent 0 285deg,#6aff9b77 360deg);animation:spin 4s linear infinite}.blip{position:absolute;width:6px;height:6px;border-radius:50%;background:#ff6565;box-shadow:0 0 10px #ff5555;left:67%;top:30%;opacity:0;transition:opacity .3s}@keyframes spin{to{transform:rotate(360deg)}}.scanbtn{width:100%;margin-top:9px;padding:14px;font-weight:bold;letter-spacing:1px}.log{padding:6px 0;border-bottom:1px solid #193725;font-size:10px;color:#a4d7b3}.log:last-child{border:0}.notice{color:var(--amber);border-color:#59472a;font-size:10px}.tag{font-size:9px;color:#80bd91;border:1px solid #28563a;padding:3px 6px;border-radius:3px}.hidden{display:none!important}
+@media(min-width:760px){.layout{grid-template-columns:1.55fr .85fr}.side{display:grid;align-content:start;gap:10px}.controls{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body><main class="wrap">
+<header class="top"><div><div class="logo">GHOST SIGNAL</div><div class="sub">PARANORMAL INVESTIGATION SYSTEM · V2.0</div></div><div><div class="status" id="status">● STANDBY</div><div class="muted">CASE FILE: GS-0027</div></div></header>
+<div class="panel bar"><span>DEVICE STATUS</span><span class="muted" id="device">VISUAL FEED OFFLINE</span></div>
+<div class="layout" style="margin-top:10px">
+<section>
+<div class="panel">
+<div class="bar"><span>01 / VISUAL SURVEILLANCE</span><span class="tag" id="rec">REC ○</span></div>
+<div class="camera" id="camera">
+<video id="video" autoplay playsinline muted></video><img id="photo" alt="업로드한 사진">
+<canvas id="figure"></canvas><div class="gridlines"></div><div class="scanlines"></div>
+<div class="hud"><span id="viewname">CAM 01<br>NO SIGNAL</span><span id="time">00:00:00<br>LIVE</span></div>
+<div class="placeholder" id="placeholder"><b>⌖</b><span>AWAITING VISUAL INPUT</span><span class="muted">CAMERA 연결 또는 사진 업로드</span></div>
+</div>
+<div class="controls">
+<button id="start">◉ 카메라 시작</button><button id="stop">■ 카메라 종료</button><button id="upload">▧ 사진 불러오기</button><button id="snap">◎ 화면 캡처</button><input id="file" type="file" accept="image/*" hidden>
+</div>
+</div>
+<div class="panel" style="margin-top:10px">
+<div class="bar"><span>02 / ENTITY RECONSTRUCTION</span><span class="tag" id="entityState">NO ENTITY</span></div>
+<div class="muted" style="margin-top:5px">점과 선으로 구성된 가상 와이어프레임 형체</div>
+<div class="bar" style="margin-top:8px"><span>ENTITY FORMATION</span><span id="formation">0%</span></div><div class="meter"><i id="formationBar"></i></div>
+</div>
+</section>
+<aside class="side">
+<div class="panel" style="text-align:center"><div class="bar"><span>03 / RADAR</span><span class="tag">SIMULATED</span></div><div class="radar"><i class="blip" id="blip"></i></div><div class="muted" id="radarText">NO SIGNAL DETECTED</div></div>
+<div class="panel">
+<div class="bar"><span>04 / EMF ACTIVITY</span><span class="num" id="emf">0.0</span></div><div class="meter"><i id="emfBar"></i></div><div class="bar muted"><span>LOW</span><span>CRITICAL</span></div>
+<div class="bar" style="margin-top:12px"><span>05 / SOUND LEVEL</span><span class="num" id="sound">0 dB</span></div><div class="meter"><i id="soundBar"></i></div><div class="muted">가상 측정값 · 실제 센서 측정 아님</div>
+</div>
+<div class="panel"><div class="bar"><span>06 / SIGNAL ANALYSIS</span><span class="tag" id="signal">STANDBY</span></div><div class="muted" style="margin-top:8px">ENVIRONMENT</div><div id="environment">UNSCANNED</div><div class="muted" style="margin-top:8px">ANOMALY PROBABILITY</div><div class="num" id="prob">0%</div><div class="meter"><i id="probBar"></i></div></div>
+<button class="scanbtn" id="scan">▶ 조사 시작</button>
+<div class="panel"><div class="bar"><span>07 / INVESTIGATION LOG</span><button id="clear" style="padding:4px 8px">CLEAR</button></div><div id="logs" style="margin-top:5px"><div class="log">[SYSTEM] GHOST SIGNAL initialized.</div></div></div>
+</aside></div>
+<div class="panel notice" style="margin-top:11px"><b>SIMULATION NOTICE</b><br>레이더, EMF, 소리 수치와 와이어프레임 출현은 공포 체험을 위한 가상 연출이야. 실제 귀신이나 초자연 현상을 탐지하지 않아. 카메라와 사진은 화면 표시용이며 외부 서버로 전송하지 않아.</div>
+<div class="sub" style="text-align:center;margin-top:15px">GHOST SIGNAL · TRUST THE SIGNAL? · V2.0</div>
+</main>
+<script>
+(()=>{
+const $=id=>document.getElementById(id),canvas=$('figure'),ctx=canvas.getContext('2d');let stream=null,scanning=false,timer=null,phase=0,visible=false,progress=0,raf=0;
+const points=[[0,0],[0,-.31],[-.12,-.27],[.12,-.27],[-.22,-.12],[.22,-.12],[-.34,.05],[.34,.05],[-.12,.02],[.12,.02],[-.13,.22],[.13,.22],[-.17,.43],[.17,.43],[-.19,.65],[.19,.65],[0,.02],[0,.19]];
+const edges=[[0,1],[1,2],[1,3],[2,4],[3,5],[4,6],[5,7],[1,16],[16,8],[16,9],[8,9],[8,10],[9,11],[10,11],[10,12],[11,13],[12,14],[13,15],[0,16]];
+function resize(){const r=$('camera').getBoundingClientRect(),d=window.devicePixelRatio||1;canvas.width=Math.max(1,r.width*d);canvas.height=Math.max(1,r.height*d);ctx.setTransform(d,0,0,d,0,0)}
+window.addEventListener('resize',resize);resize();
+function draw(){const w=$('camera').clientWidth,h=$('camera').clientHeight;ctx.clearRect(0,0,w,h);if(visible&&progress>0){let cx=w*.51,cy=h*.56,s=Math.min(w,h)*.52,glow=progress/100;let sway=Math.sin(Date.now()/650)*2;
+let p=points.map(([x,y],i)=>[cx+x*s+sway*(i%2?1:-1),cy+y*s]);ctx.save();ctx.globalAlpha=glow;ctx.shadowBlur=12;ctx.shadowColor='#7affb2';ctx.strokeStyle='#a8ffd0';ctx.fillStyle='#caffdc';ctx.lineWidth=1.15;
+edges.forEach(([a,b],i)=>{ctx.beginPath();ctx.moveTo(...p[a]);ctx.lineTo(...p[b]);ctx.stroke()});
+p.forEach(([x,y],i)=>{ctx.beginPath();ctx.arc(x,y,i===0?3:2,0,Math.PI*2);ctx.fill()});
+ctx.restore();}raf=requestAnimationFrame(draw)}
+draw();
+function log(t){let d=document.createElement('div');d.className='log';d.textContent='['+new Date().toLocaleTimeString()+'] '+t;$('logs').prepend(d);while($('logs').children.length>12)$('logs').lastChild.remove()}
+function status(t){$('status').textContent='● '+t}
+function setFeed(label){$('placeholder').classList.add('hidden');$('viewname').innerHTML=label+'<br>VISUAL FEED ACTIVE';$('device').textContent=label+' CONNECTED'}
+$('start').onclick=async()=>{try{if(!navigator.mediaDevices?.getUserMedia)throw Error('카메라는 HTTPS 주소에서 이용할 수 있어.');stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});$('video').srcObject=stream;$('video').style.display='block';$('photo').style.display='none';setFeed('LIVE CAM 01');status('CAMERA CONNECTED');log('Camera feed connected.')}catch(e){log('Camera error: '+e.message);status('CAMERA ERROR')}};
+$('stop').onclick=()=>{if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}$('video').srcObject=null;$('video').style.display='none';$('device').textContent='CAMERA STOPPED';status('STANDBY');log('Camera stopped.')};
+$('upload').onclick=()=>$('file').click();
+$('file').onchange=e=>{let f=e.target.files[0];if(!f)return;if(!f.type.startsWith('image/'))return log('Invalid image file.');$('photo').src=URL.createObjectURL(f);$('photo').style.display='block';$('video').style.display='none';setFeed('PHOTO ANALYSIS');log('Photo loaded.')};
+$('snap').onclick=()=>{let v=$('video');if(!stream||!v.videoWidth)return log('Start the camera first.');let c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);$('photo').src=c.toDataURL('image/jpeg');$('photo').style.display='block';v.style.display='none';setFeed('SNAPSHOT');log('Snapshot captured.')};
+function tick(){if(!scanning)return;phase++;let event=Math.random()>.58;visible=event;progress=event?100:0;let emf=(Math.random()*4.9).toFixed(1),sound=Math.floor(12+Math.random()*65),prob=event?Math.floor(55+Math.random()*44):Math.floor(Math.random()*35);$('emf').textContent=emf;$('emfBar').style.width=(emf/5*100)+'%';$('sound').textContent=sound+' dB';$('soundBar').style.width=(sound/90*100)+'%';$('prob').textContent=prob+'%';$('probBar').style.width=prob+'%';$('blip').style.opacity=event?'1':'0';$('blip').style.left=(20+Math.random()*60)+'%';$('blip').style.top=(20+Math.random()*60)+'%';$('radarText').textContent=event?'SIGNAL DETECTED':'SCANNING...';$('environment').textContent=event?'ANOMALOUS SIGNAL':'NO SIGNIFICANT CHANGE';$('signal').textContent=event?'ANOMALY':'NORMAL';$('entityState').textContent=event?'ENTITY FORMING':'NO ENTITY';$('formation').textContent=event?'100%':'0%';$('formationBar').style.width=event?'100%':'0%';if(event){status('SIGNAL DETECTED');log('⚠ SIMULATED ENTITY SIGNAL DETECTED.')}else{status('SCANNING');log('Sweep complete. No simulated entity.')} }
+$('scan').onclick=()=>{scanning=!scanning;if(scanning){$('scan').textContent='Ⅱ 조사 중지';$('rec').textContent='REC ●';status('SCANNING');log('Investigation started.');tick();timer=setInterval(tick,4200)}else{clearInterval(timer);visible=false;progress=0;$('scan').textContent='▶ 조사 시작';$('rec').textContent='REC ○';$('entityState').textContent='NO ENTITY';$('formation').textContent='0%';$('formationBar').style.width='0%';$('radarText').textContent='SCAN PAUSED';status('SCAN PAUSED');log('Investigation paused.')}};
+$('clear').onclick=()=>{$('logs').innerHTML='';log('Log cleared.')};
+function clock(){$('time').innerHTML=new Date().toLocaleTimeString()+'<br>LIVE'}clock();setInterval(clock,1000);
+})();
+</script></body></html>
